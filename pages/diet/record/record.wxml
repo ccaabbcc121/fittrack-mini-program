@@ -1,0 +1,149 @@
+<view class="page">
+  <!-- ===== 日期导航 ===== -->
+  <view class="date-bar">
+    <text class="date-arrow" bindtap="prevDay">‹</text>
+    <view class="date-center" bindtap="goToday">
+      <text class="date-text">{{currentDate}}</text>
+      <text class="date-today-hint">今天</text>
+    </view>
+    <text class="date-arrow" bindtap="nextDay">›</text>
+  </view>
+
+  <!-- ===== 热量环形图 + 进度 ===== -->
+  <view class="cal-card">
+    <view class="cal-circle">
+      <text class="cal-num">{{totalCalories}}</text>
+      <text class="cal-unit">kcal</text>
+    </view>
+    <text class="cal-goal">目标 2000 kcal</text>
+    <view class="cal-progress">
+      <view class="cal-progress-fill" style="width: {{calPercent}}%"></view>
+    </view>
+    <view class="cal-meta">
+      <text class="cal-meta-item">{{totalRecords}} 条记录</text>
+      <text class="cal-meta-item">{{calPercent}}%</text>
+    </view>
+  </view>
+
+  <!-- ===== 三个餐段 ===== -->
+  <view wx:for="{{mealTypes}}" wx:key="key" class="meal-block">
+    <!-- 餐段头部 -->
+    <view class="meal-head">
+      <view class="meal-head-left">
+        <text class="meal-icon">{{item.icon}}</text>
+        <text class="meal-label">{{item.label}}</text>
+        <text class="meal-cal">{{item.calories}} kcal</text>
+      </view>
+      <button class="btn-add-meal" bindtap="showAddDialog" data-meal="{{item.key}}">+ 记录</button>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{item.records.length === 0}}" class="meal-empty">
+      <text>暂无记录，点击「+ 记录」添加</text>
+    </view>
+
+    <!-- 食物列表 -->
+    <view wx:for="{{item.records}}" wx:for-item="r" wx:key="id" class="food-row">
+      <view class="food-info">
+        <text class="food-name">{{r.foodName}}</text>
+        <text class="food-macro">蛋白{{r.protein}}g · 碳水{{r.carbs}}g · 脂肪{{r.fat}}g</text>
+      </view>
+      <view class="food-right">
+        <text class="food-kcal">{{r.calories}} kcal</text>
+        <text class="food-edit" bindtap="handleEdit" data-id="{{r.id}}">编辑</text>
+        <text class="food-del" bindtap="handleDelete" data-id="{{r.id}}">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 全天空状态 ===== -->
+  <view wx:if="{{totalRecords === 0}}" class="full-empty">
+    <text class="full-empty-icon">🥗</text>
+    <text class="full-empty-text">今天还没有饮食记录</text>
+    <text class="full-empty-sub">点击餐段旁的「+ 记录」开始记录</text>
+  </view>
+
+  <!-- ===== 添加弹窗 ===== -->
+  <view wx:if="{{showDialog}}" class="dialog-overlay" bindtap="closeDialog">
+    <view class="dialog" catchtap="noop">
+      <view class="dialog-head">
+        <text class="dialog-title">{{isEdit ? '编辑' : '添加'}}{{currentMealLabel}}</text>
+        <text class="dialog-close" bindtap="closeDialog">✕</text>
+      </view>
+
+      <view class="dialog-body">
+        <view class="form-item">
+          <text class="form-label">食物名称 *</text>
+          <input
+            class="form-input"
+            placeholder="例如：鸡胸肉沙拉"
+            value="{{form.foodName}}"
+            bindinput="onFormInput"
+            data-field="foodName"
+            maxlength="30"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">热量 (kcal) *</text>
+          <input
+            class="form-input"
+            type="digit"
+            placeholder="350"
+            value="{{form.calories}}"
+            bindinput="onFormInput"
+            data-field="calories"
+          />
+        </view>
+
+        <view class="form-row-3">
+          <view class="form-item form-item-sm">
+            <text class="form-label">蛋白质(g)</text>
+            <input
+              class="form-input"
+              type="digit"
+              placeholder="30"
+              value="{{form.protein}}"
+              bindinput="onFormInput"
+              data-field="protein"
+            />
+          </view>
+          <view class="form-item form-item-sm">
+            <text class="form-label">碳水(g)</text>
+            <input
+              class="form-input"
+              type="digit"
+              placeholder="40"
+              value="{{form.carbs}}"
+              bindinput="onFormInput"
+              data-field="carbs"
+            />
+          </view>
+          <view class="form-item form-item-sm">
+            <text class="form-label">脂肪(g)</text>
+            <input
+              class="form-input"
+              type="digit"
+              placeholder="10"
+              value="{{form.fat}}"
+              bindinput="onFormInput"
+              data-field="fat"
+            />
+          </view>
+        </view>
+      </view>
+
+      <view class="dialog-footer">
+        <button class="btn-cancel" bindtap="closeDialog">取消</button>
+        <button
+          class="btn-confirm"
+          bindtap="handleAdd"
+          disabled="{{!canSubmit}}"
+          loading="{{submitting}}"
+        >
+          {{isEdit ? '保存' : '添加'}}
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

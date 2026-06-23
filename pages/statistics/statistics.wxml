@@ -1,0 +1,49 @@
+<view class="page">
+  <view class="card stats-overview">
+    <text class="card-title">数据总览</text>
+    <view class="overview-grid">
+      <view class="ov-item">
+        <text class="ov-num">{{overview.weeklyWorkouts || 0}}</text>
+        <text class="ov-label">周训练次数</text>
+      </view>
+      <view class="ov-item">
+        <text class="ov-num">{{overview.monthlyWorkouts || 0}}</text>
+        <text class="ov-label">月训练次数</text>
+      </view>
+      <view class="ov-item">
+        <text class="ov-num">{{overview.totalCaloriesBurned || 0}}</text>
+        <text class="ov-label">消耗热量(kcal)</text>
+      </view>
+      <view class="ov-item">
+        <text class="ov-num">{{overview.totalCaloriesIntake || 0}}</text>
+        <text class="ov-label">摄入热量(kcal)</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <text class="card-title">本周训练分布</text>
+    <view wx:if="{{weeklyBars.length === 0}}" class="text-muted text-center">暂无数据</view>
+    <view class="chart-bars">
+      <view class="bar-col" wx:for="{{weeklyBars}}" wx:key="day">
+        <text class="bar-val">{{item.workouts}}次</text>
+        <view class="bar" style="height: {{item.barHeight}}px; background: {{item.active ? 'linear-gradient(180deg, #0f3460, rgba(15,52,96,0.3))' : '#e8e8e8'}}"></view>
+        <text class="bar-label">{{item.day}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <text class="card-title">本月训练统计</text>
+    <view wx:if="{{monthlyRows.length === 0}}" class="text-muted text-center">暂无数据</view>
+    <view class="monthly-list">
+      <view class="monthly-row" wx:for="{{monthlyRows}}" wx:key="week">
+        <text class="mr-week">{{item.week}}</text>
+        <view class="mr-bar-wrap">
+          <view class="mr-bar" style="width: {{item.barPercent}}%"></view>
+        </view>
+        <text class="mr-count">{{item.workouts}}次</text>
+      </view>
+    </view>
+  </view>
+</view>

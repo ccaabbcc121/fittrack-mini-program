@@ -1,0 +1,37 @@
+<!-- pages/login/login.wxml -->
+<view class="page">
+  <view class="login-container">
+    <view class="logo-section">
+      <view class="logo-icon">💪</view>
+      <text class="app-name">FitTrack</text>
+      <text class="app-slogan">你的智能健身伙伴</text>
+    </view>
+
+    <view class="form-section">
+      <button class="login-btn wechat-btn" bindtap="handleWechatLogin"
+        loading="{{loading}}" disabled="{{loading}}">
+        <text class="wechat-icon">💬</text>
+        <text>{{loading ? '登录中...' : '微信一键登录'}}</text>
+      </button>
+
+      <view class="divider-text">
+        <view class="divider-line"></view>
+        <text class="divider-label">或</text>
+        <view class="divider-line"></view>
+      </view>
+
+      <view class="mock-login">
+        <button class="login-btn mock-btn" bindtap="handleMockLogin">
+          <text>🔧 Mock 登录（开发模式）</text>
+        </button>
+      </view>
+    </view>
+
+    <view class="footer-text">
+      <text>登录即表示同意</text>
+      <text class="link">《用户协议》</text>
+      <text>和</text>
+      <text class="link">《隐私政策》</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,98 @@
+<view class="page">
+  <!-- 顶部操作栏 -->
+  <view class="top-bar">
+    <view class="top-bar-left">
+      <text class="top-title">训练计划</text>
+      <text class="top-count" wx:if="{{total > 0}}">共 {{total}} 个</text>
+    </view>
+    <view class="top-bar-right">
+      <text class="top-link" bindtap="goToHistory">历史记录 ›</text>
+      <button class="btn-primary btn-sm" bindtap="goToCreate">+ 新建</button>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{plans.length === 0}}" class="empty-state">
+    <text class="empty-icon">🏋️</text>
+    <text class="empty-text">还没有训练计划</text>
+    <text class="empty-sub">点击下方按钮创建你的第一个训练计划</text>
+    <button class="btn-primary btn-sm mt-16" bindtap="goToCreate">+ 创建训练计划</button>
+  </view>
+
+  <!-- 计划列表 -->
+  <view wx:else>
+    <view
+      wx:for="{{plans}}"
+      wx:key="id"
+      class="card plan-card {{item._local ? 'plan-local' : ''}}"
+    >
+      <!-- 计划头部：类型标签 + 本地标记 + 操作 -->
+      <view class="plan-head">
+        <view class="plan-head-left">
+          <text class="plan-type-tag" style="background: {{item.typeColor}}18; color: {{item.typeColor}};">
+            {{item.typeLabel}}
+          </text>
+          <text wx:if="{{item._local}}" class="plan-local-tag">本地</text>
+        </view>
+        <view class="plan-head-right">
+          <text class="plan-action" bindtap="goToEdit" data-id="{{item.id}}">编辑</text>
+          <text class="plan-action plan-action-del" bindtap="handleDelete" data-id="{{item.id}}">删除</text>
+        </view>
+      </view>
+
+      <!-- 计划名称 -->
+      <text class="plan-name">{{item.name}}</text>
+
+      <!-- 描述 -->
+      <text class="plan-desc" wx:if="{{item.description}}">{{item.description}}</text>
+
+      <!-- 元数据 -->
+      <view class="plan-meta">
+        <text class="plan-meta-item">
+          <text class="meta-icon">⏱️</text> {{item.duration}}分钟
+        </text>
+        <text class="plan-meta-item">
+          <text class="meta-icon">🔥</text> {{item.calories}} kcal
+        </text>
+      </view>
+
+      <!-- 训练动作列表 -->
+      <view class="plan-exercises" wx:if="{{item.exercises.length > 0}}">
+        <text
+          wx:for="{{item.exercises}}"
+          wx:for-item="ex"
+          wx:key="*this"
+          class="exercise-tag"
+        >{{ex}}</text>
+      </view>
+
+      <!-- 今日打卡按钮 -->
+      <view class="plan-checkin">
+        <button
+          wx:if="{{checkedInPlanIds.indexOf(item.id) === -1}}"
+          class="btn-checkin"
+          bindtap="handleCheckin"
+          data-id="{{item.id}}"
+          data-name="{{item.name}}"
+          data-calories="{{item.calories}}"
+          data-duration="{{item.duration}}"
+        >
+          今日打卡
+        </button>
+        <view wx:else class="checked-in-badge">
+          <text>✅ 今日已完成</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部提示 -->
+    <view class="list-footer">
+      <text class="footer-text">— 已显示全部计划 —</text>
+    </view>
+  </view>
+</view>

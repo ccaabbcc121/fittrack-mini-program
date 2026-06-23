@@ -1,0 +1,152 @@
+/* pages/weight/chart/chart.wxss */
+.page {
+  padding: 16px;
+  padding-bottom: 30px;
+}
+
+/* ===== 加载 ===== */
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+}
+.loading-text {
+  font-size: 14px;
+  color: #999;
+}
+
+/* ===== 卡片 ===== */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* ===== 柱状图 ===== */
+.chart-wrap {
+  display: flex;
+  height: 180px;
+}
+.chart-y {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-right: 8px;
+  flex-shrink: 0;
+}
+.y-tick {
+  font-size: 11px;
+  color: #999;
+  line-height: 1;
+}
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  flex: 1;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20px;
+}
+.bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 50px;
+}
+.bar-weight {
+  font-size: 10px;
+  color: #666;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.bar-weight.bar-min {
+  color: #34c759;
+}
+.bar-weight.bar-max {
+  color: #e94560;
+}
+.bar-fill {
+  width: 22px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, #0f3460, rgba(15,52,96,0.4));
+  transition: height 0.5s ease;
+}
+.bar-fill-min {
+  background: linear-gradient(180deg, #34c759, rgba(52,199,89,0.4));
+}
+.bar-fill-max {
+  background: linear-gradient(180deg, #e94560, rgba(233,69,96,0.4));
+}
+.bar-date {
+  font-size: 10px;
+  color: #999;
+  margin-top: 6px;
+  white-space: nowrap;
+}
+
+/* ===== 统计 ===== */
+.stats-grid {
+  display: flex;
+}
+.stat-cell {
+  flex: 1;
+  text-align: center;
+}
+.stat-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f3460;
+  display: block;
+}
+.stat-val.trend {
+  font-size: 16px;
+}
+.stat-lbl {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* ===== 记录表 ===== */
+.rec-table {
+  margin-top: 4px;
+}
+.rec-row {
+  display: flex;
+  padding: 8px 0;
+  border-bottom: 1px solid #f8f8f8;
+}
+.rec-row.rec-header {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+.rec-header .rec-cell {
+  font-size: 12px;
+  font-weight: 600;
+  color: #999;
+}
+.rec-cell {
+  font-size: 13px;
+}
+.rec-date-cell {
+  flex: 1.5;
+}
+.rec-wt-cell {
+  flex: 1;
+  text-align: center;
+  font-weight: 500;
+}
+.rec-bf-cell {
+  flex: 1;
+  text-align: right;
+  color: #999;
+}

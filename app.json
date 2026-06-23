@@ -1,0 +1,63 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/profile/profile",
+    "pages/bmi/bmi",
+    "pages/training/list/list",
+    "pages/training/create/create",
+    "pages/training/history/history",
+    "pages/diet/record/record",
+    "pages/diet/stats/stats",
+    "pages/weight/list/list",
+    "pages/weight/chart/chart",
+    "pages/statistics/statistics"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1a1a2e",
+    "navigationBarTitleText": "FitTrack",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#8e8e93",
+    "selectedColor": "#0f3460",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/training/list/list",
+        "text": "训练",
+        "iconPath": "images/tab-training.png",
+        "selectedIconPath": "images/tab-training-active.png"
+      },
+      {
+        "pagePath": "pages/diet/record/record",
+        "text": "饮食",
+        "iconPath": "images/tab-diet.png",
+        "selectedIconPath": "images/tab-diet-active.png"
+      },
+      {
+        "pagePath": "pages/statistics/statistics",
+        "text": "统计",
+        "iconPath": "images/tab-stats.png",
+        "selectedIconPath": "images/tab-stats-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tab-profile.png",
+        "selectedIconPath": "images/tab-profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

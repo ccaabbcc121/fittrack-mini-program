@@ -1,0 +1,307 @@
+/* pages/diet/record/record.wxss */
+.page {
+  padding: 16px;
+  padding-bottom: 30px;
+}
+
+/* ===== 日期导航 ===== */
+.date-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+.date-arrow {
+  font-size: 24px;
+  color: #0f3460;
+  padding: 0 8px;
+  font-weight: 300;
+}
+.date-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.date-text {
+  font-size: 16px;
+  font-weight: 700;
+}
+.date-today-hint {
+  font-size: 10px;
+  color: #0f3460;
+  margin-top: 1px;
+}
+
+/* ===== 热量环形 ===== */
+.cal-card {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.cal-circle {
+  width: 96px;
+  height: 96px;
+  border-radius: 48px;
+  background: linear-gradient(135deg, #0f3460, #16213e);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.cal-num {
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+.cal-unit {
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  margin-top: 2px;
+}
+.cal-goal {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+  display: block;
+}
+.cal-progress {
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+  margin: 8px 40px 0;
+  overflow: hidden;
+}
+.cal-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0f3460, #e94560);
+  border-radius: 3px;
+  transition: width 0.4s;
+}
+.cal-meta {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 6px;
+}
+.cal-meta-item {
+  font-size: 12px;
+  color: #bbb;
+}
+
+/* ===== 餐段区域 ===== */
+.meal-block {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+.meal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.meal-head-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.meal-icon {
+  font-size: 18px;
+}
+.meal-label {
+  font-size: 15px;
+  font-weight: 600;
+}
+.meal-cal {
+  font-size: 12px;
+  color: #999;
+}
+.btn-add-meal {
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 14px;
+  background: #f0f0f0;
+  color: #333;
+  border: none;
+  line-height: 1.6;
+  height: auto;
+}
+
+/* 空餐段 */
+.meal-empty {
+  text-align: center;
+  padding: 14px 0;
+  font-size: 12px;
+  color: #ccc;
+}
+
+/* 食物行 */
+.food-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid #f8f8f8;
+}
+.food-info {
+  flex: 1;
+  min-width: 0;
+}
+.food-name {
+  font-size: 14px;
+  font-weight: 500;
+  display: block;
+}
+.food-macro {
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 2px;
+  display: block;
+}
+.food-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+.food-kcal {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e94560;
+}
+.food-edit {
+  font-size: 11px;
+  color: #0f3460;
+  padding: 2px 4px;
+}
+.food-del {
+  font-size: 11px;
+  color: #ccc;
+}
+
+/* ===== 全天空状态 ===== */
+.full-empty {
+  text-align: center;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.full-empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+.full-empty-text {
+  font-size: 15px;
+  color: #999;
+  font-weight: 500;
+}
+.full-empty-sub {
+  font-size: 12px;
+  color: #ccc;
+  margin-top: 4px;
+}
+
+/* ===== 弹窗 ===== */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+}
+.dialog {
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.dialog-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 0;
+}
+.dialog-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+.dialog-close {
+  font-size: 20px;
+  color: #ccc;
+  padding: 4px;
+}
+.dialog-body {
+  padding: 16px 20px 0;
+}
+.dialog-footer {
+  display: flex;
+  padding: 16px 20px 30px;
+  gap: 10px;
+}
+
+/* 弹窗表单 */
+.form-item {
+  margin-bottom: 14px;
+}
+.form-item-sm {
+  flex: 1;
+}
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 6px;
+}
+.form-input {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+.form-row-3 {
+  display: flex;
+  gap: 10px;
+}
+
+/* 弹窗按钮 */
+.btn-cancel {
+  flex: 1;
+  height: 44px;
+  line-height: 44px;
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  text-align: center;
+}
+.btn-confirm {
+  flex: 1;
+  height: 44px;
+  line-height: 44px;
+  background: linear-gradient(135deg, #0f3460, #16213e);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  text-align: center;
+}

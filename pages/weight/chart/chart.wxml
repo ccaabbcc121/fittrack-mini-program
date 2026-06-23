@@ -1,0 +1,84 @@
+<view class="page">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{isEmpty}}" class="empty-state">
+    <text class="empty-icon">📈</text>
+    <text class="empty-text">暂无体重数据</text>
+    <text class="empty-sub">在「体重管理」页面添加至少 2 条记录后，趋势图会显示在这里</text>
+  </view>
+
+  <!-- 有数据 -->
+  <view wx:else>
+    <!-- ===== 趋势图（纯 CSS 柱状图） ===== -->
+    <view class="card">
+      <text class="card-title">体重变化趋势</text>
+
+      <!-- Y 轴标签 + 柱状图 -->
+      <view class="chart-wrap">
+        <view class="chart-y">
+          <text class="y-tick" wx:for="{{yLabels}}" wx:key="*this">{{item}}</text>
+        </view>
+        <view class="chart-bars">
+          <view
+            wx:for="{{bars}}"
+            wx:key="date"
+            class="bar-col"
+          >
+            <text class="bar-weight {{item.isMin ? 'bar-min' : ''}} {{item.isMax ? 'bar-max' : ''}}">
+              {{item.weight}}
+            </text>
+            <view
+              class="bar-fill {{item.isMin ? 'bar-fill-min' : ''}} {{item.isMax ? 'bar-fill-max' : ''}}"
+              style="height: {{item.barHeight}}px;"
+            ></view>
+            <text class="bar-date">{{item.date}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 统计卡片 ===== -->
+    <view class="card">
+      <text class="card-title">体重统计</text>
+      <view class="stats-grid">
+        <view class="stat-cell">
+          <text class="stat-val">{{stats.minWeight}}</text>
+          <text class="stat-lbl">最低(kg)</text>
+        </view>
+        <view class="stat-cell">
+          <text class="stat-val">{{stats.maxWeight}}</text>
+          <text class="stat-lbl">最高(kg)</text>
+        </view>
+        <view class="stat-cell">
+          <text class="stat-val">{{stats.avgWeight}}</text>
+          <text class="stat-lbl">平均(kg)</text>
+        </view>
+        <view class="stat-cell">
+          <text class="stat-val trend">{{stats.trend}}</text>
+          <text class="stat-lbl">趋势</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 详细记录表 ===== -->
+    <view class="card">
+      <text class="card-title">全部记录</text>
+      <view class="rec-table">
+        <view class="rec-row rec-header">
+          <text class="rec-cell rec-date-cell">日期</text>
+          <text class="rec-cell rec-wt-cell">体重</text>
+          <text class="rec-cell rec-bf-cell">体脂</text>
+        </view>
+        <view wx:for="{{records}}" wx:key="id" class="rec-row">
+          <text class="rec-cell rec-date-cell">{{item.recordDate}}</text>
+          <text class="rec-cell rec-wt-cell">{{item.weight}} kg</text>
+          <text class="rec-cell rec-bf-cell">{{item.bodyFat ? item.bodyFat + '%' : '—'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

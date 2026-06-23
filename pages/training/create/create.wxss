@@ -1,0 +1,162 @@
+/* pages/training/create/create.wxss */
+.page {
+  padding: 16px;
+  padding-bottom: 40px;
+}
+
+/* 页面头部 */
+.page-header {
+  margin-bottom: 16px;
+}
+.page-title {
+  font-size: 20px;
+  font-weight: 700;
+  display: block;
+}
+.page-desc {
+  font-size: 13px;
+  color: #999;
+  margin-top: 4px;
+  display: block;
+}
+
+/* 表单卡片 */
+.form-card {
+  padding: 20px 16px;
+}
+
+/* 表单组 */
+.form-group {
+  margin-bottom: 20px;
+}
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+.form-label.required::after {
+  content: ' *';
+  color: #e94560;
+}
+.form-input {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 14px;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+.form-input:focus {
+  border-color: #0f3460;
+  background: #fff;
+}
+.form-textarea {
+  width: 100%;
+  min-height: 80px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  background: #fafafa;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+.exercise-area {
+  min-height: 120px;
+  font-family: monospace;
+}
+.form-hint {
+  font-size: 11px;
+  color: #bbb;
+  margin-top: 4px;
+  display: block;
+}
+.char-count {
+  font-size: 11px;
+  color: #ccc;
+  text-align: right;
+  display: block;
+  margin-top: 2px;
+}
+
+/* 行内双列 */
+.form-row {
+  display: flex;
+}
+
+/* 训练类型选择器 */
+.type-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.type-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: calc(33.33% - 7px);
+  padding: 12px 4px;
+  border-radius: 10px;
+  background: #f5f5f5;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+.type-option.type-active {
+  background: rgba(15, 52, 96, 0.06);
+  border-color: #0f3460;
+}
+.type-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+.type-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+.type-option.type-active .type-label {
+  color: #0f3460;
+  font-weight: 600;
+}
+
+/* 底部提交栏（固定） */
+.submit-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+}
+.submit-hint {
+  text-align: center;
+  font-size: 12px;
+  color: #ff9500;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 48px;
+  line-height: 48px;
+  font-size: 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 为底部栏留出空间 */
+.page {
+  padding-bottom: 100px;
+}

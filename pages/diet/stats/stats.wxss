@@ -1,0 +1,188 @@
+/* pages/diet/stats/stats.wxss */
+.page {
+  padding: 16px;
+  padding-bottom: 30px;
+}
+
+/* ===== 加载 ===== */
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+}
+.loading-text {
+  font-size: 14px;
+  color: #999;
+}
+
+/* ===== 卡片通用 ===== */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* ===== 周概览 ===== */
+.summary-card {
+  background: linear-gradient(135deg, #0f3460, #16213e);
+  border-radius: 14px;
+  padding: 18px 16px;
+  margin-bottom: 14px;
+}
+.summary-card .section-title {
+  color: rgba(255,255,255,0.8);
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+.summary-row {
+  display: flex;
+}
+.summary-item {
+  flex: 1;
+  text-align: center;
+}
+.summary-num {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+.summary-lbl {
+  display: block;
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  margin-top: 4px;
+}
+
+/* ===== 7天柱状图 ===== */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 150px;
+  padding: 0 4px;
+}
+.bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+.bar-val {
+  font-size: 10px;
+  color: #666;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.bar-val-zero {
+  color: #ccc;
+}
+.bar-fill {
+  width: 22px;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.4s;
+}
+.bar-label {
+  font-size: 11px;
+  color: #999;
+  margin-top: 6px;
+}
+
+/* ===== 每日明细表 ===== */
+.daily-table {
+  margin-top: 4px;
+}
+.daily-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f8f8f8;
+}
+.daily-row.daily-header {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+.daily-header .daily-cell {
+  font-size: 12px;
+  font-weight: 600;
+  color: #999;
+}
+.daily-row-empty {
+  opacity: 0.4;
+}
+.daily-cell {
+  font-size: 13px;
+}
+.daily-date {
+  flex: 1.2;
+}
+.daily-kcal {
+  flex: 1;
+  text-align: center;
+  font-weight: 500;
+}
+.daily-count {
+  flex: 0.8;
+  text-align: right;
+  color: #999;
+}
+.text-muted {
+  color: #ccc;
+}
+
+/* ===== 营养素 ===== */
+.meal-empty-text {
+  text-align: center;
+  font-size: 13px;
+  color: #ccc;
+  padding: 16px 0;
+}
+.macro-list {
+  padding: 4px 0;
+}
+.macro-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+}
+.macro-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+.macro-name {
+  width: 50px;
+  font-size: 13px;
+  color: #666;
+  flex-shrink: 0;
+}
+.macro-val {
+  width: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+.macro-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.macro-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s;
+}

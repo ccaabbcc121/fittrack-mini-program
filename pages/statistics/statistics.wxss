@@ -1,0 +1,17 @@
+.page { padding: 16px; }
+.card-title { font-size: 17px; font-weight: 600; display: block; margin-bottom: 16px; }
+.overview-grid { display: flex; flex-wrap: wrap; }
+.ov-item { width: 50%; text-align: center; margin-bottom: 16px; }
+.ov-num { font-size: 24px; font-weight: 700; color: var(--primary); display: block; }
+.ov-label { font-size: 13px; color: #999; margin-top: 4px; }
+.chart-bars { display: flex; align-items: flex-end; justify-content: space-between; height: 130px; padding: 0 4px; }
+.bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.bar-val { font-size: 11px; color: #999; margin-bottom: 4px; }
+.bar { width: 22px; border-radius: 4px 4px 0 0; transition: height 0.4s; }
+.bar-label { font-size: 11px; color: #999; margin-top: 6px; }
+.monthly-list { margin-top: 8px; }
+.monthly-row { display: flex; align-items: center; padding: 8px 0; }
+.mr-week { width: 50px; font-size: 13px; }
+.mr-bar-wrap { flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; margin: 0 10px; }
+.mr-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 4px; transition: width 0.4s; }
+.mr-count { font-size: 13px; font-weight: 500; }

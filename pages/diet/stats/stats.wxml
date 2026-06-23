@@ -1,0 +1,114 @@
+<view class="page">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{isEmpty}}" class="empty-state">
+    <text class="empty-icon">📊</text>
+    <text class="empty-text">暂无饮食数据</text>
+    <text class="empty-sub">在「饮食记录」页面添加数据后，统计图表会显示在这里</text>
+  </view>
+
+  <!-- 有数据 -->
+  <view wx:else>
+    <!-- ===== 周概览卡片 ===== -->
+    <view class="summary-card">
+      <text class="section-title">本周概览</text>
+      <view class="summary-row">
+        <view class="summary-item">
+          <text class="summary-num">{{weekTotal}}</text>
+          <text class="summary-lbl">总摄入(kcal)</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-num">{{weekAvg}}</text>
+          <text class="summary-lbl">日均(kcal)</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-num">{{weekMax}}</text>
+          <text class="summary-lbl">最高(kcal)</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-num">{{weekRecords}}</text>
+          <text class="summary-lbl">总记录数</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 7天柱状图 ===== -->
+    <view class="card">
+      <text class="section-title">近7天热量趋势</text>
+      <view class="bar-chart">
+        <view class="bar-col" wx:for="{{weeklyData}}" wx:key="date">
+          <text class="bar-val" wx:if="{{item.calories > 0}}">{{item.calories}}</text>
+          <text class="bar-val bar-val-zero" wx:else>-</text>
+          <view
+            class="bar-fill"
+            style="height: {{item.barHeight}}px; background: {{item.calories > 0 ? 'linear-gradient(180deg, #0f3460, rgba(15,52,96,0.3))' : '#f0f0f0'}}"
+          ></view>
+          <text class="bar-label">{{item.dateLabel}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 每日明细 ===== -->
+    <view class="card">
+      <text class="section-title">每日明细</text>
+      <view class="daily-table">
+        <view class="daily-row daily-header">
+          <text class="daily-cell daily-date">日期</text>
+          <text class="daily-cell daily-kcal">热量</text>
+          <text class="daily-cell daily-count">记录</text>
+        </view>
+        <view
+          wx:for="{{dailyDetail}}"
+          wx:key="date"
+          class="daily-row {{item.calories === 0 ? 'daily-row-empty' : ''}}"
+        >
+          <text class="daily-cell daily-date">{{item.date.slice(5)}} 周{{item.dateLabel}}</text>
+          <text class="daily-cell daily-kcal {{item.calories === 0 ? 'text-muted' : ''}}">
+            {{item.calories > 0 ? item.calories + ' kcal' : '—'}}
+          </text>
+          <text class="daily-cell daily-count">
+            {{item.recordCount > 0 ? item.recordCount + '条' : '—'}}
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 今日营养素 ===== -->
+    <view class="card">
+      <text class="section-title">今日营养素分布</text>
+      <view wx:if="{{macroTotal === 0}}" class="meal-empty-text">暂无数据</view>
+      <view wx:else>
+        <view class="macro-list">
+          <view class="macro-row">
+            <view class="macro-dot" style="background: #e94560;"></view>
+            <text class="macro-name">蛋白质</text>
+            <text class="macro-val">{{macroProtein}}g</text>
+            <view class="macro-bar-wrap">
+              <view class="macro-bar" style="width: {{macroTotal > 0 ? macroProtein / macroTotal * 100 : 0}}%; background: #e94560;"></view>
+            </view>
+          </view>
+          <view class="macro-row">
+            <view class="macro-dot" style="background: #ff9500;"></view>
+            <text class="macro-name">碳水</text>
+            <text class="macro-val">{{macroCarbs}}g</text>
+            <view class="macro-bar-wrap">
+              <view class="macro-bar" style="width: {{macroTotal > 0 ? macroCarbs / macroTotal * 100 : 0}}%; background: #ff9500;"></view>
+            </view>
+          </view>
+          <view class="macro-row">
+            <view class="macro-dot" style="background: #0f3460;"></view>
+            <text class="macro-name">脂肪</text>
+            <text class="macro-val">{{macroFat}}g</text>
+            <view class="macro-bar-wrap">
+              <view class="macro-bar" style="width: {{macroTotal > 0 ? macroFat / macroTotal * 100 : 0}}%; background: #0f3460;"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

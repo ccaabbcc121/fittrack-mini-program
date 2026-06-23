@@ -1,0 +1,6 @@
+.nav-bar { background: var(--primary); color: #fff; }
+.nav-content { display: flex; align-items: center; justify-content: center; position: relative; padding: 0 16px; }
+.nav-title { font-size: 17px; font-weight: 600; }
+.nav-left { position: absolute; left: 14px; display: flex; align-items: center; }
+.back-icon { font-size: 28px; font-weight: 300; }
+.nav-right { position: absolute; right: 14px; }

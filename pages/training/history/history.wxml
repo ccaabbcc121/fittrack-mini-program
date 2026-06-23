@@ -1,0 +1,147 @@
+<view class="page">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{records.length === 0}}" class="empty-state">
+    <text class="empty-icon">📝</text>
+    <text class="empty-text">暂无训练记录</text>
+    <text class="empty-sub">在"训练计划"页面完成打卡后，记录会显示在这里</text>
+  </view>
+
+  <!-- 有数据时 -->
+  <view wx:else>
+    <!-- 统计概览 -->
+    <view class="stats-bar">
+      <view class="stats-item">
+        <text class="stats-num">{{stats.totalWorkouts}}</text>
+        <text class="stats-lbl">总次数</text>
+      </view>
+      <view class="stats-item">
+        <text class="stats-num">{{stats.totalDuration}}</text>
+        <text class="stats-lbl">总时长(min)</text>
+      </view>
+      <view class="stats-item">
+        <text class="stats-num">{{stats.totalCalories}}</text>
+        <text class="stats-lbl">总消耗(kcal)</text>
+      </view>
+    </view>
+
+    <!-- 按日期分组 -->
+    <view wx:for="{{groupedRecords}}" wx:key="date" class="date-group">
+      <!-- 日期头 -->
+      <view class="date-head">
+        <text class="date-text">{{item.date}}</text>
+        <text class="date-sub">{{item.records.length}}次 · {{item.dayTotal}}kcal</text>
+      </view>
+
+      <!-- 该日记录 -->
+      <view
+        wx:for="{{item.records}}"
+        wx:for-item="r"
+        wx:key="id"
+        class="card record-card"
+      >
+        <view class="record-main">
+          <!-- 左侧图标 -->
+          <view class="record-icon-wrap">
+            <text class="record-icon">💪</text>
+          </view>
+          <!-- 中间信息 -->
+          <view class="record-body">
+            <text class="record-name">{{r.planName}}</text>
+            <text class="record-note" wx:if="{{r.note}}">💬 {{r.note}}</text>
+          </view>
+          <!-- 右侧数据 -->
+          <view class="record-data">
+            <text class="record-kcal">{{r.calories}} kcal</text>
+            <text class="record-time">{{r.duration}} min</text>
+          </view>
+        </view>
+        <!-- 操作按钮 -->
+        <view class="record-ops">
+          <text class="record-op-edit" bindtap="handleEdit" data-id="{{r.id}}">编辑</text>
+          <text class="record-op-del" bindtap="handleDelete" data-id="{{r.id}}">删除</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部 -->
+    <view class="list-footer">
+      <text class="footer-text">— 共 {{stats.totalWorkouts}} 条训练记录 —</text>
+    </view>
+  </view>
+
+  <!-- ========== 编辑弹窗 ========== -->
+  <view wx:if="{{showEdit}}" class="dialog-mask" bindtap="closeEdit">
+    <view class="dialog" catchtap="noop">
+      <text class="dialog-title">编辑训练记录</text>
+
+      <view class="form-group">
+        <text class="form-label">计划名称</text>
+        <input
+          class="form-input"
+          placeholder="训练计划名称"
+          value="{{editForm.planName}}"
+          bindinput="onEditInput"
+          data-field="planName"
+        />
+      </view>
+
+      <view class="form-row">
+        <view class="form-group flex-1" style="margin-right: 12px;">
+          <text class="form-label">时长（分钟）</text>
+          <input
+            class="form-input"
+            type="digit"
+            placeholder="30"
+            value="{{editForm.duration}}"
+            bindinput="onEditInput"
+            data-field="duration"
+          />
+        </view>
+        <view class="form-group flex-1">
+          <text class="form-label">热量（kcal）</text>
+          <input
+            class="form-input"
+            type="digit"
+            placeholder="300"
+            value="{{editForm.calories}}"
+            bindinput="onEditInput"
+            data-field="calories"
+          />
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">备注</text>
+        <input
+          class="form-input"
+          placeholder="训练感受..."
+          value="{{editForm.note}}"
+          bindinput="onEditInput"
+          data-field="note"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">日期</text>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="YYYY-MM-DD"
+          value="{{editForm.recordDate}}"
+          bindinput="onEditInput"
+          data-field="recordDate"
+        />
+      </view>
+
+      <view class="dialog-btns">
+        <button class="btn-secondary flex-1" style="margin-right: 10px;" bindtap="closeEdit">取消</button>
+        <button class="btn-primary flex-1" bindtap="handleSaveEdit">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

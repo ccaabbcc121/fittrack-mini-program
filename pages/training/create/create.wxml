@@ -1,0 +1,114 @@
+<view class="page">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">{{isEdit ? '编辑训练计划' : '创建训练计划'}}</text>
+    <text class="page-desc">{{isEdit ? '修改计划内容后保存' : '创建你的专属训练计划'}}</text>
+  </view>
+
+  <!-- 计划名称 -->
+  <view class="card form-card">
+    <view class="form-group">
+      <text class="form-label required">计划名称</text>
+      <input
+        class="form-input"
+        placeholder="例如：上肢力量训练"
+        value="{{form.name}}"
+        bindinput="onFieldInput"
+        data-field="name"
+        maxlength="30"
+      />
+    </view>
+
+    <!-- 训练类型 -->
+    <view class="form-group">
+      <text class="form-label">训练类型</text>
+      <view class="type-selector">
+        <view
+          wx:for="{{['strength','cardio','hiit','flexibility','other']}}"
+          wx:key="*this"
+          class="type-option {{form.type === item ? 'type-active' : ''}}"
+          bindtap="selectType"
+          data-type="{{item}}"
+        >
+          <text class="type-icon">
+            <block wx:if="{{item === 'strength'}}">🏋️</block>
+            <block wx:elif="{{item === 'cardio'}}">🏃</block>
+            <block wx:elif="{{item === 'hiit'}}">⚡</block>
+            <block wx:elif="{{item === 'flexibility'}}">🧘</block>
+            <block wx:else>🎯</block>
+          </text>
+          <text class="type-label">{{item === 'strength' ? '力量训练' : item === 'cardio' ? '有氧运动' : item === 'hiit' ? 'HIIT' : item === 'flexibility' ? '柔韧性' : '其他'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 时长 + 热量 -->
+    <view class="form-row">
+      <view class="form-group flex-1" style="margin-right: 12px;">
+        <text class="form-label">训练时长（分钟）</text>
+        <input
+          class="form-input"
+          type="digit"
+          placeholder="30"
+          value="{{form.duration}}"
+          bindinput="onFieldInput"
+          data-field="duration"
+        />
+      </view>
+      <view class="form-group flex-1">
+        <text class="form-label">预估热量（kcal）</text>
+        <input
+          class="form-input"
+          type="digit"
+          placeholder="300"
+          value="{{form.calories}}"
+          bindinput="onFieldInput"
+          data-field="calories"
+        />
+      </view>
+    </view>
+
+    <!-- 描述 -->
+    <view class="form-group">
+      <text class="form-label">计划描述</text>
+      <textarea
+        class="form-textarea"
+        placeholder="描述训练目标、重点部位、注意事项等..."
+        value="{{form.description}}"
+        bindinput="onFieldInput"
+        data-field="description"
+        maxlength="200"
+      />
+      <text class="char-count">{{form.description.length}}/200</text>
+    </view>
+
+    <!-- 训练动作 -->
+    <view class="form-group">
+      <text class="form-label">训练动作</text>
+      <textarea
+        class="form-textarea exercise-area"
+        placeholder="每行输入一个动作，例如：&#10;俯卧撑 3组x15次&#10;引体向上 3组x8次&#10;哑铃弯举 3组x12次"
+        value="{{exercisesText}}"
+        bindinput="onExercisesInput"
+        maxlength="500"
+      />
+      <text class="form-hint">每行一个动作，支持格式：动作名 组数x次数</text>
+    </view>
+
+  </view>
+
+  <!-- 底部提交栏（固定） -->
+  <view class="submit-bar">
+    <view class="submit-hint" wx:if="{{!canSubmit && !submitting}}">
+      <text>📝 请先填写计划名称以启用提交按钮</text>
+    </view>
+    <button
+      class="btn-primary submit-btn"
+      bindtap="handleSubmit"
+      disabled="{{!canSubmit}}"
+      loading="{{submitting}}"
+    >
+      {{submitting ? '保存中...' : (isEdit ? '💾 保存修改' : '✅ 创建计划')}}
+    </button>
+  </view>
+</view>

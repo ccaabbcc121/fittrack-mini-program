@@ -1,0 +1,210 @@
+/* pages/training/history/history.wxss */
+.page {
+  padding: 16px;
+  padding-bottom: 30px;
+}
+
+/* ===== 加载 ===== */
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+}
+.loading-text {
+  font-size: 14px;
+  color: #999;
+}
+
+/* ===== 统计概览 ===== */
+.stats-bar {
+  display: flex;
+  background: linear-gradient(135deg, #0f3460, #16213e);
+  border-radius: 14px;
+  padding: 18px 0;
+  margin-bottom: 20px;
+}
+.stats-item {
+  flex: 1;
+  text-align: center;
+}
+.stats-num {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+.stats-lbl {
+  display: block;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
+}
+
+/* ===== 日期分组 ===== */
+.date-group {
+  margin-bottom: 20px;
+}
+.date-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 4px;
+  margin-bottom: 8px;
+}
+.date-text {
+  font-size: 16px;
+  font-weight: 700;
+}
+.date-sub {
+  font-size: 12px;
+  color: #999;
+}
+
+/* ===== 记录卡片 ===== */
+.record-card {
+  margin-bottom: 8px;
+  padding: 14px 16px;
+}
+.record-main {
+  display: flex;
+  align-items: center;
+}
+.record-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(15, 52, 96, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+.record-icon {
+  font-size: 20px;
+}
+.record-body {
+  flex: 1;
+  min-width: 0;
+}
+.record-name {
+  font-size: 15px;
+  font-weight: 600;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.record-note {
+  font-size: 12px;
+  color: #999;
+  margin-top: 3px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.record-data {
+  text-align: right;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+.record-kcal {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #e94560;
+}
+.record-time {
+  display: block;
+  font-size: 11px;
+  color: #999;
+  margin-top: 2px;
+}
+
+/* 操作按钮行 */
+.record-ops {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f5f5f5;
+}
+.record-op-edit {
+  font-size: 12px;
+  color: #0f3460;
+}
+.record-op-del {
+  font-size: 12px;
+  color: #ccc;
+}
+
+/* ===== 编辑弹窗 ===== */
+.dialog-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+.dialog {
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 24px 20px;
+  padding-bottom: 44px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.dialog-title {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  display: block;
+  margin-bottom: 22px;
+}
+
+/* 弹窗内表单 */
+.form-group {
+  margin-bottom: 16px;
+}
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 6px;
+}
+.form-input {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+.form-row {
+  display: flex;
+}
+.dialog-btns {
+  display: flex;
+  margin-top: 24px;
+}
+
+/* ===== 底部 ===== */
+.list-footer {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+.footer-text {
+  font-size: 12px;
+  color: #ddd;
+}

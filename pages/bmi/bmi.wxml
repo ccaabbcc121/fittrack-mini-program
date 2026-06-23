@@ -1,0 +1,52 @@
+<!-- pages/bmi/bmi.wxml -->
+<view class="page">
+  <view class="card bmi-card">
+    <text class="card-title">BMI 计算器</text>
+    <text class="card-desc">身体质量指数（BMI）是衡量体重是否健康的标准</text>
+    <view class="form-group">
+      <text class="form-label">身高（cm）</text>
+      <input class="form-input" type="digit" placeholder="请输入身高" value="{{height}}" bindinput="onHeightInput"/>
+    </view>
+    <view class="form-group">
+      <text class="form-label">体重（kg）</text>
+      <input class="form-input" type="digit" placeholder="请输入体重" value="{{weight}}" bindinput="onWeightInput"/>
+    </view>
+    <button class="btn-primary" bindtap="calcBMI" disabled="{{!height || !weight}}">计算 BMI</button>
+    <view wx:if="{{bmi !== null}}" class="bmi-result">
+      <view class="bmi-circle" style="border-color: {{category.color}}">
+        <text class="bmi-value" style="color: {{category.color}}">{{bmi}}</text>
+        <text class="bmi-label">BMI</text>
+      </view>
+      <text class="bmi-category" style="color: {{category.color}}">{{category.label}}</text>
+      <view class="bmi-advice">
+        <text class="advice-text">{{advice}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card bmi-ref">
+    <text class="card-title">BMI 参考范围</text>
+    <view class="ref-list">
+      <view class="ref-item">
+        <view class="ref-dot" style="background: #34c759"></view>
+        <text class="ref-range">18.5 - 23.9</text>
+        <text class="ref-label">正常范围</text>
+      </view>
+      <view class="ref-item">
+        <view class="ref-dot" style="background: #ff9500"></view>
+        <text class="ref-range">&lt; 18.5</text>
+        <text class="ref-label">体重偏瘦</text>
+      </view>
+      <view class="ref-item">
+        <view class="ref-dot" style="background: #ff9500"></view>
+        <text class="ref-range">24 - 27.9</text>
+        <text class="ref-label">体重偏重</text>
+      </view>
+      <view class="ref-item">
+        <view class="ref-dot" style="background: #ff3b30"></view>
+        <text class="ref-range">>= 28</text>
+        <text class="ref-label">肥胖</text>
+      </view>
+    </view>
+  </view>
+</view>
