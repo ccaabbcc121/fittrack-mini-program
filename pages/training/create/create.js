@@ -1,5 +1,11 @@
-const api = require('../../../utils/api.js')
+// pages/training/create/create.js — 云开发版
+// 原逻辑：api.getWorkoutPlans() 加载 + api.createWorkoutPlan/updateWorkoutPlan 提交
+//         失败时 saveToLocalCache() → wx.setStorageSync('_local_plans')
+// 改造后：cloudDB.getWorkoutPlans() 加载 + cloudDB.createWorkoutPlan/updateWorkoutPlan 提交
+//         移除：saveToLocalCache() 和 _local_plans 写入（云数据库为主存储）
+const cloudDB = require('../../../utils/cloud-db.js')
 const util = require('../../../utils/util.js')
+
 Page({
   data: {
     isEdit: false,
@@ -13,25 +19,23 @@ Page({
     },
     exercisesText: '',
     submitting: false,
-    canSubmit: false          // JS 侧计算按钮可用态，避免 WXML 模板内调用 .trim()
+    canSubmit: false  // JS 侧计算按钮可用态
   },
 
   onLoad(options) {
     if (options.id) {
-      const id = parseInt(options.id)
-      this.setData({ isEdit: true, editId: id })
-      this.loadPlan(id)
+      this.setData({ isEdit: true, editId: options.id })
+      this.loadPlan(options.id)
     }
-    // 初始状态：表单为空，按钮不可用
     this._updateCanSubmit()
   },
 
-  // 编辑模式：加载计划数据
+  // 编辑模式：从云数据库加载计划数据
   loadPlan(id) {
-    api.getWorkoutPlans(1, 50).then(res => {
+    cloudDB.getWorkoutPlans(1, 50).then(res => {
       const data = res.data || {}
       const plans = data.records || data || []
-      const plan = plans.find(p => p.id === id)
+      const plan = plans.find(p => p._id === id || p.id === id)
       if (!plan) {
         util.showToast('计划不存在')
         return
@@ -52,7 +56,6 @@ Page({
         },
         exercisesText: exercises.join('\n')
       })
-      // 编辑模式加载完数据后刷新按钮态
       this._updateCanSubmit()
     }).catch(() => {
       util.showToast('加载计划失败')
@@ -64,7 +67,7 @@ Page({
     this.setData({ 'form.type': e.currentTarget.dataset.type })
   },
 
-  // 表单字段输入（统一更新 + 刷新按钮态）
+  // 表单字段输入
   onFieldInput(e) {
     const field = e.currentTarget.dataset.field
     this.setData({ ['form.' + field]: e.detail.value })
@@ -76,7 +79,7 @@ Page({
     this.setData({ exercisesText: e.detail.value })
   },
 
-  // ============ 核心：JS 侧计算按钮可用态 ============
+  // JS 侧计算按钮可用态
   _updateCanSubmit() {
     const name = (this.data.form.name || '').trim()
     const canSubmit = name.length > 0 && !this.data.submitting
@@ -87,23 +90,23 @@ Page({
 
   // 提交表单
   handleSubmit() {
-    console.log('[handleSubmit] 入口触发')
+    console.log('[TrainCreate] handleSubmit 触发')
 
     const { form, exercisesText, isEdit, editId, submitting } = this.data
     if (submitting) {
-      console.log('[handleSubmit] submitting 锁未释放，拦截')
+      console.log('[TrainCreate] submitting 锁未释放，拦截')
       return
     }
 
     // 验证
     if (!form.name || !form.name.trim()) {
-      console.log('[handleSubmit] 计划名称为空，拦截')
+      console.log('[TrainCreate] 计划名称为空，拦截')
       return util.showToast('请输入计划名称')
     }
     const duration = parseInt(form.duration) || 30
     const calories = parseInt(form.calories) || 0
     if (duration <= 0 || duration > 480) {
-      console.log('[handleSubmit] 时长非法:', duration)
+      console.log('[TrainCreate] 时长非法:', duration)
       return util.showToast('训练时长需在 1-480 分钟之间')
     }
 
@@ -122,55 +125,31 @@ Page({
       exercises: JSON.stringify(exercises)
     }
 
-    console.log('[handleSubmit] payload:', JSON.stringify(payload))
+    console.log('[TrainCreate] payload:', JSON.stringify(payload))
 
     this.setData({ submitting: true, canSubmit: false })
 
-    const finish = (isSuccess) => {
-      console.log('[handleSubmit] API ' + (isSuccess ? '成功' : '失败'))
+    const apiCall = isEdit
+      ? cloudDB.updateWorkoutPlan(editId, payload)
+      : cloudDB.createWorkoutPlan(payload)
+
+    console.log('[TrainCreate] 提交云数据库, isEdit:', isEdit)
+
+    apiCall.then(() => {
+      console.log('[TrainCreate] 提交成功')
       this.setData({ submitting: false })
       this._updateCanSubmit()
-      this.saveToLocalCache(payload)
-      util.showToast(
-        isSuccess ? (isEdit ? '修改成功' : '创建成功') : '网络异常，已保存到本地',
-        isSuccess ? 'success' : 'none'
-      )
+      util.showToast(isEdit ? '修改成功' : '创建成功', 'success')
       setTimeout(() => {
         wx.navigateBack({
           fail: () => wx.switchTab({ url: '/pages/training/list/list' })
         })
       }, 600)
-    }
-
-    const apiCall = isEdit
-      ? api.updateWorkoutPlan(editId, payload)
-      : api.createWorkoutPlan(payload)
-
-    console.log('[handleSubmit] 发起 API 请求, isEdit:', isEdit)
-    apiCall.then(() => finish(true)).catch((err) => {
-      console.error('[handleSubmit] API 异常:', err)
-      finish(false)
+    }).catch((err) => {
+      console.error('[TrainCreate] 提交失败:', err)
+      this.setData({ submitting: false })
+      this._updateCanSubmit()
+      util.showToast('网络异常，请重试')
     })
-  },
-
-  // 本地缓存备份
-  saveToLocalCache(payload) {
-    try {
-      const cache = wx.getStorageSync('_local_plans') || []
-      cache.unshift({
-        id: Date.now(),
-        userId: 1,
-        ...payload,
-        exercises: payload.exercises,
-        status: 1,
-        _local: true,
-        createTime: util.getToday(),
-        updateTime: util.getToday()
-      })
-      wx.setStorageSync('_local_plans', cache)
-      console.log('[handleSubmit] 本地缓存已保存')
-    } catch (e) {
-      console.error('[handleSubmit] 本地缓存失败:', e)
-    }
   }
 })

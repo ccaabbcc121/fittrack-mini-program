@@ -1,5 +1,9 @@
-const api = require('../../../utils/api.js')
+// pages/training/history/history.js — 云开发版
+// 原逻辑：api.getWorkoutRecords() 加载 + api.updateWorkoutRecord/deleteWorkoutRecord 编辑/删除
+// 改造后：cloudDB.getWorkoutRecords/updateWorkoutRecord/deleteWorkoutRecord
+const cloudDB = require('../../../utils/cloud-db.js')
 const util = require('../../../utils/util.js')
+
 Page({
   data: {
     records: [],
@@ -24,7 +28,8 @@ Page({
   async loadRecords() {
     this.setData({ loading: true })
     try {
-      const res = await api.getWorkoutRecords(1, 200).catch(() => ({ data: { records: [] } }))
+      const res = await cloudDB.getWorkoutRecords(1, 200)
+        .catch(() => ({ data: { records: [] } }))
       const data = res.data || {}
       const records = data.records || data || []
 
@@ -52,6 +57,7 @@ Page({
 
       this.setData({ records, groupedRecords, stats, loading: false })
     } catch (e) {
+      console.error('[TrainHistory] loadRecords 异常:', e)
       this.setData({ loading: false })
     }
   },
@@ -61,7 +67,7 @@ Page({
     const id = e.currentTarget.dataset.id
     util.showConfirm('删除记录', '确定要删除这条训练记录吗？').then(ok => {
       if (!ok) return
-      api.deleteWorkoutRecord(id).then(() => {
+      cloudDB.deleteWorkoutRecord(id).then(() => {
         util.showToast('已删除')
         this.loadRecords()
       }).catch(() => {
@@ -73,7 +79,7 @@ Page({
   // 打开编辑弹窗
   handleEdit(e) {
     const id = e.currentTarget.dataset.id
-    const record = this.data.records.find(r => r.id === id)
+    const record = this.data.records.find(r => r._id === id || r.id === id)
     if (!record) return
     this.setData({
       showEdit: true,
@@ -115,7 +121,7 @@ Page({
       note: editForm.note.trim(),
       recordDate: editForm.recordDate
     }
-    api.updateWorkoutRecord(editRecord.id, data).then(() => {
+    cloudDB.updateWorkoutRecord(editRecord._id || editRecord.id, data).then(() => {
       util.showToast('修改成功', 'success')
       this.closeEdit()
       this.loadRecords()

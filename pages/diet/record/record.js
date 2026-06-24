@@ -1,5 +1,11 @@
-const api = require('../../../utils/api.js')
+// pages/diet/record/record.js — 云开发版
+// 原逻辑：api.getDietStats() 加载 + api.createDietRecord/updateDietRecord/deleteDietRecord
+//         失败时 saveLocalRecord() → wx.setStorageSync('_local_diets')
+// 改造后：cloudDB.getDietStats/createDietRecord/updateDietRecord/deleteDietRecord
+//         移除：saveLocalRecord() 和 _local_diets 写入
+const cloudDB = require('../../../utils/cloud-db.js')
 const util = require('../../../utils/util.js')
+
 Page({
   data: {
     currentDate: '',
@@ -16,7 +22,7 @@ Page({
     currentMealLabel: '',
     form: { foodName: '', calories: '', protein: '', carbs: '', fat: '' },
     submitting: false,
-    canSubmit: false          // JS 侧计算按钮可用态
+    canSubmit: false  // JS 侧计算按钮可用态
   },
 
   onShow() {
@@ -30,7 +36,7 @@ Page({
 
   loadData() {
     const date = this.data.currentDate
-    api.getDietStats(date).then(res => {
+    cloudDB.getDietStats(date).then(res => {
       const stats = res.data || {}
       const records = stats.records || []
 
@@ -69,7 +75,7 @@ Page({
     this.loadData()
   },
 
-  // ============ 按钮可用态计算（JS 侧，避免 WXML 表达式求值不稳定） ============
+  // 按钮可用态计算
   _updateCanSubmit() {
     const { form, submitting } = this.data
     const nameOk = (form.foodName || '').trim().length > 0
@@ -101,7 +107,7 @@ Page({
     const id = e.currentTarget.dataset.id
     let record = null
     for (const meal of this.data.mealTypes) {
-      const found = meal.records.find(r => r.id === id)
+      const found = meal.records.find(r => r._id === id || r.id === id)
       if (found) { record = found; break }
     }
     if (!record) return
@@ -135,7 +141,7 @@ Page({
   // 阻止弹窗背景点击冒泡
   noop() {},
 
-  // 表单输入（更新 + 同步按钮态）
+  // 表单输入
   onFormInput(e) {
     const f = e.currentTarget.dataset.field
     this.setData({ ['form.' + f]: e.detail.value })
@@ -144,21 +150,21 @@ Page({
 
   // 提交添加 / 保存编辑
   handleAdd() {
-    console.log('[diet.handleAdd] 入口触发')
+    console.log('[DietRecord] handleAdd 触发')
 
     const { form, currentMeal, currentDate, isEdit, editId, submitting } = this.data
     if (submitting) {
-      console.log('[diet.handleAdd] submitting 锁未释放，拦截')
+      console.log('[DietRecord] submitting 锁未释放，拦截')
       return
     }
 
     // 验证
     if (!form.foodName || !form.foodName.trim()) {
-      console.log('[diet.handleAdd] 食物名称为空，拦截')
+      console.log('[DietRecord] 食物名称为空，拦截')
       return util.showToast('请输入食物名称')
     }
     if (!form.calories || parseInt(form.calories) <= 0) {
-      console.log('[diet.handleAdd] 热量无效，拦截')
+      console.log('[DietRecord] 热量无效，拦截')
       return util.showToast('请输入有效的热量值')
     }
 
@@ -174,24 +180,23 @@ Page({
       recordDate: currentDate
     }
 
-    console.log('[diet.handleAdd] payload:', JSON.stringify(payload))
+    console.log('[DietRecord] payload:', JSON.stringify(payload))
 
     const apiCall = isEdit
-      ? api.updateDietRecord(editId, payload)
-      : api.createDietRecord(payload)
+      ? cloudDB.updateDietRecord(editId, payload)
+      : cloudDB.createDietRecord(payload)
 
     const successMsg = isEdit ? '修改成功' : '添加成功'
-    console.log('[diet.handleAdd] 发起 API 请求, isEdit:', isEdit)
+    console.log('[DietRecord] 提交云数据库, isEdit:', isEdit)
 
     apiCall.then(() => {
-      console.log('[diet.handleAdd] API 成功')
+      console.log('[DietRecord] 提交成功')
       util.showToast(successMsg, 'success')
       this.closeDialog()
       this.loadData()
     }).catch((err) => {
-      console.error('[diet.handleAdd] API 失败:', err)
-      this.saveLocalRecord(payload)
-      util.showToast('已保存到本地', 'success')
+      console.error('[DietRecord] 提交失败:', err)
+      util.showToast('网络异常，请重试')
       this.closeDialog()
       this.loadData()
     }).finally(() => {
@@ -201,23 +206,12 @@ Page({
     })
   },
 
-  // 本地备份
-  saveLocalRecord(payload) {
-    try {
-      const cache = wx.getStorageSync('_local_diets') || []
-      cache.unshift({ id: Date.now(), userId: 1, ...payload, _local: true,
-        createTime: new Date().toISOString() })
-      wx.setStorageSync('_local_diets', cache)
-      console.log('[diet.handleAdd] 本地缓存已保存')
-    } catch (e) { /* 静默 */ }
-  },
-
   // 删除记录
   handleDelete(e) {
     const id = e.currentTarget.dataset.id
     util.showConfirm('删除记录', '确定要删除这条饮食记录吗？').then(ok => {
       if (!ok) return
-      api.deleteDietRecord(id).then(() => {
+      cloudDB.deleteDietRecord(id).then(() => {
         util.showToast('已删除')
         this.loadData()
       }).catch(() => {

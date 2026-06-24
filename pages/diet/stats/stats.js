@@ -1,17 +1,21 @@
-const api = require('../../../utils/api.js')
+// pages/diet/stats/stats.js — 云开发版
+// 原逻辑：api.getDietStats() 批量查询 7 天数据 + 营养素统计
+// 改造后：cloudDB.getDietStats() → 云数据库实时查询
+const cloudDB = require('../../../utils/cloud-db.js')
 const util = require('../../../utils/util.js')
+
 Page({
   data: {
     weekTotal: 0,
     weekAvg: 0,
     weekMax: 0,
-    weekRecords: 0,       // 本周总记录条数
-    weeklyData: [],       // 7 天柱状图数据
+    weekRecords: 0,         // 本周总记录条数
+    weeklyData: [],         // 7 天柱状图数据
     macroProtein: 0,
     macroCarbs: 0,
     macroFat: 0,
-    macroTotal: 0,        // 营养素总和
-    dailyDetail: [],      // 每日明细
+    macroTotal: 0,          // 营养素总和
+    dailyDetail: [],        // 每日明细
     loading: true,
     isEmpty: false
   },
@@ -37,7 +41,7 @@ Page({
         const ds = d.toISOString().split('T')[0]
         const label = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()]
         dayPromises.push(
-          api.getDietStats(ds).then(res => {
+          cloudDB.getDietStats(ds).then(res => {
             const s = res.data || {}
             return {
               date: ds,
@@ -64,7 +68,7 @@ Page({
       // 2. 获取今日营养素
       let macroProtein = 0, macroCarbs = 0, macroFat = 0
       try {
-        const macroRes = await api.getDietStats(util.getToday())
+        const macroRes = await cloudDB.getDietStats(util.getToday())
         const records = (macroRes.data || {}).records || []
         macroProtein = records.reduce((s, r) => s + (r.protein || 0), 0)
         macroCarbs = records.reduce((s, r) => s + (r.carbs || 0), 0)
@@ -86,6 +90,7 @@ Page({
         isEmpty
       })
     } catch (e) {
+      console.error('[DietStats] loadData 异常:', e)
       this.setData({ loading: false, isEmpty: true })
     }
   }

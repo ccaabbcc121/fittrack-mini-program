@@ -1,10 +1,19 @@
-const api = require('../../utils/api.js')
+// pages/statistics/statistics.js — 云开发版
+// 原逻辑：api.getOverview/getWeeklyStats/getMonthlyStats → Mock 数据
+// 改造后：cloudDB.getOverview/getWeeklyStats/getMonthlyStats → 云数据库实时聚合
+const cloudDB = require('../../utils/cloud-db.js')
+
 Page({
   data: { overview: {}, weeklyBars: [], monthlyRows: [] },
+
   onShow() { this.loadData() },
+
   loadData() {
-    api.getOverview().then(res => this.setData({ overview: res.data || {} })).catch(() => {})
-    api.getWeeklyStats().then(res => {
+    cloudDB.getOverview().then(res => {
+      this.setData({ overview: res.data || {} })
+    }).catch(() => {})
+
+    cloudDB.getWeeklyStats().then(res => {
       const data = res.data || { days: [], workouts: [], calories: [] }
       const weeklyBars = data.days.map((day, i) => ({
         day,
@@ -15,7 +24,8 @@ Page({
       }))
       this.setData({ weeklyBars })
     }).catch(() => {})
-    api.getMonthlyStats().then(res => {
+
+    cloudDB.getMonthlyStats().then(res => {
       const data = res.data || { weeks: [], workouts: [], calories: [] }
       const maxW = Math.max(1, ...(data.workouts || []))
       const monthlyRows = data.weeks.map((week, i) => ({

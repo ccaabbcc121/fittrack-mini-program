@@ -1,12 +1,24 @@
+// pages/bmi/bmi.js — 云开发版
+// 原逻辑：wx.getStorageSync('userInfo') 预填身高体重
+// 改造后：getApp().globalData.userInfo 预填
 const util = require('../../utils/util.js')
+
 Page({
   data: { height: '', weight: '', bmi: null, category: {}, advice: '' },
+
   onShow() {
-    const info = wx.getStorageSync('userInfo')
-    if (info) this.setData({ height: String(info.height || ''), weight: String(info.weight || '') })
+    const info = getApp().globalData.userInfo
+    if (info) {
+      this.setData({
+        height: String(info.height || ''),
+        weight: String(info.weight || '')
+      })
+    }
   },
+
   onHeightInput(e) { this.setData({ height: e.detail.value }) },
   onWeightInput(e) { this.setData({ weight: e.detail.value }) },
+
   calcBMI() {
     const h = parseFloat(this.data.height)
     const w = parseFloat(this.data.weight)

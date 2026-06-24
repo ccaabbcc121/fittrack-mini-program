@@ -1,4 +1,7 @@
-const api = require('../../../utils/api.js')
+// pages/weight/chart/chart.js — 云开发版
+// 原逻辑：api.getWeightRecords() 加载
+// 改造后：cloudDB.getWeightRecords()
+const cloudDB = require('../../../utils/cloud-db.js')
 const util = require('../../../utils/util.js')
 
 Page({
@@ -6,7 +9,7 @@ Page({
     records: [],
     bars: [],               // CSS 柱状图数据
     yLabels: [],            // Y 轴刻度
-    stats: { minWeight: "--", maxWeight: "--", avgWeight: "--", trend: "--" },
+    stats: { minWeight: '--', maxWeight: '--', avgWeight: '--', trend: '--' },
     loading: true,
     isEmpty: false
   },
@@ -21,7 +24,7 @@ Page({
 
   loadData() {
     this.setData({ loading: true })
-    api.getWeightRecords(1, 200).then(res => {
+    cloudDB.getWeightRecords(1, 200).then(res => {
       const data = res.data || {}
       // 按日期升序排列（用于图表）
       const records = (data.records || data || []).slice().reverse()
@@ -30,7 +33,7 @@ Page({
         return this.setData({
           loading: false, isEmpty: true,
           bars: [], yLabels: [],
-          stats: { minWeight: "--", maxWeight: "--", avgWeight: "--", trend: "--" }
+          stats: { minWeight: '--', maxWeight: '--', avgWeight: '--', trend: '--' }
         })
       }
 
@@ -43,10 +46,10 @@ Page({
       // 趋势判断
       const firstW = weights[0]
       const lastW = weights[weights.length - 1]
-      const trend = lastW < firstW ? "⬇ 下降" : lastW > firstW ? "⬆ 上升" : "➕ 持平"
+      const trend = lastW < firstW ? '⬇ 下降' : lastW > firstW ? '⬆ 上升' : '➕ 持平'
 
       // 生成 CSS 柱状图数据
-      const maxBarH = 140 // 最大柱子高度 px
+      const maxBarH = 140
       const bars = records.map(r => ({
         date: r.recordDate.slice(5),     // MM-DD
         weight: r.weight,
